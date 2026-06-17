@@ -10,16 +10,17 @@
 - 发现前序产物不足以支撑当前阶段时，必须停止继续扩写，并明确回退建议。
 
 ## Shared Execution Order
-1. 识别当前阶段目标与目标产物。
-2. 检查当前阶段的输入门。
-3. 物理回读必要的上游产物，而不是依赖对话记忆。
-4. 物理回读 `C:\knowledge\INDEX.md` 以及本阶段声明的必须加载文件，并在阶段产物中留下物理读取与工具使用证据。
-5. 按当前阶段协议完成分析、设计、拆分、实现、审查或复盘。
-6. 生成或更新当前阶段产物（写入项目目录 `.workflow/` 下的物理文件），并确保产物为可回读文件而不是口头状态。
-7. 对当前阶段的关键结论执行证据校验，记录于产物中。
-8. 对前序产物执行最小质疑检查。
-9. 判断是否需要更新知识库（更新 `C:\knowledge` 或项目本地 `docs/architecture/`）。
-10. 输出唯一的下一步建议，或给出明确回退/阻塞说明。
+所有阶段必须按以下 **7 步固定序列**运行(与 `core/stage-gates.md` 中的 Standard 7-Step Execution Order 完全一致):
+
+1. **加载规则**:加载本阶段入口列出的必须加载文件与核心规则,在 Evidence Ledger 登记 `Type=Read` 条目。
+2. **回读上游产物**:物理读取本阶段所需的上游阶段产物 `.workflow/<artifact>.md`(若有),登记 `E-id`。
+3. **验收输入**:对上游产物按 `Upstream Consumption` 章节做结构化验收(`Consumed / Not Applicable / Deferred`),不达标则触发 Rollback Gate 并回到上游阶段补齐。
+4. **探索源码、图谱、知识**:按 `core/codegraph-engine.md` 的最少动作清单执行 codegraph 查询;读取 `C:\knowledge\INDEX.md` 与项目本地 `docs/architecture/INDEX.md`(若存在);全部读取与查询登记为 `E-id`。
+5. **产出文件**:按 `templates/` 中本阶段对应模板创建或更新 `.workflow/<artifact>.md`,产物落盘。
+6. **回读自检**:执行 `core/anti-hallucination.md` 中的 Verification Order;核对 Claim Evidence Map 中每条断言的 `Supporting E-ids` 是否真实存在;核对 Upstream Reference Rate=100%。
+7. **下一步建议**:仅在所有门禁通过时输出唯一下一步建议;否则只能写 `Blockers` + `Rollback Advice`。
+
+> 序列禁止打乱或跳步。"先产出再读上游"或"先下结论再补证据"均视为违规。
 
 ## Handoff Rule
 - 每个阶段在推荐下一阶段前，必须先完成一次上游产物验收，而不是默认相信前序阶段。

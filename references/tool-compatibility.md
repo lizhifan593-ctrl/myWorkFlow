@@ -25,5 +25,27 @@
 - 不要求不同模型走完全相同的中间过程，但要求达到同样的结果下限。
 
 ## Fallback Rule
-- 若某工具不可用，应说明当前缺失的是哪类能力，并选择最近似的替代路径。
-- 若无法安全替代，应显式阻塞，而不是假装完成。
+- 若某工具不可用,应说明当前缺失的是哪类能力,并选择最近似的替代路径。
+- 若无法安全替代,应显式阻塞,而不是假装完成。
+- 所有回退动作必须在 Evidence Ledger 中真实登记,禁止"假装已读 / 已调"。
+
+## Capability-to-Tool Mapping
+| Capability                | Primary Tool / Command                         | Fallback (Capability-Equivalent)                          |
+| ------------------------- | ---------------------------------------------- | --------------------------------------------------------- |
+| 文件读取                   | `view_file` / `Get-Content -Encoding utf8`     | `cat` / `type`(注意 Windows 编码问题);失败时显式 Blocker |
+| 文本搜索                   | `grep` / `Select-String` / 编辑器内置搜索       | `findstr`(Windows);命中行号必须登记                       |
+| 跨文件符号定义/引用        | `codegraph.find_definition` / `find_callers` / `find_callees` / `search_symbol` / `trace_flow` | `grep -nR <symbol>` + 多次 `view_file` 交叉确认             |
+| 多步推理                   | `sequential-thinking` MCP                      | 多轮自评论 + 显式 thoughtNumber 链(必须贴出回包字段)       |
+| 命令执行                   | `bash` / PowerShell 7+                         | 显式记录退出码与日志摘要                                   |
+| 项目知识图谱               | `codegraph` 索引                               | `docs/architecture/INDEX.md` + 子模块文档                  |
+
+## CodeGraph Compatibility
+- **初始化层不可豁免**:无论平台如何,进入工作流前必须尝试初始化 `.codegraph/codegraph.db`;若初始化失败,在产物开头写 `CodeGraph Status: Unavailable; Fallback=grep+view_file`,并把每条原本应靠图谱产生的断言降级为 `Not verified` 或 `Pending`。
+- **查询层等价回退**:当 codegraph 不可用时,只允许用 `grep + view_file` 的等价路径作为查询替代;命中行号、文件路径与匹配片段必须以 `E-id` 登记。
+- **结构化跳过证据**:即便选择跳过查询,产物的 `CodeGraph Evidence` 章节也必须给出 `Skipped Action / Skip Reason / Alternative Evidence E-ids` 三段。
+- **不可用情形的初始化登记**:不可用情形下依然必须登记"已尝试初始化 + 失败原因",**禁止**省略尝试动作。
+- 与 `core/codegraph-engine.md` 配套:本节定义"工具不可用怎么办",`codegraph-engine.md` 定义"工具可用时必须做什么"。
+
+## Evidence Ledger Integration
+- 所有回退路径产生的读取与查询必须以 `Type=Read / Search / Tool Call / Command` 登记到 Evidence Ledger,字段(Tool or Command / Target / Result / Supports Claim)必须齐备。
+- 失败回包必须如实登记 `Result=Failed: <错误摘要>`,且不得作为完成断言的支撑证据。

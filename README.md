@@ -2,22 +2,66 @@
 
 这是一个用于管理和存储 AI 智能体工作流规范文件的仓库。
 
-## 目录结构与说明
+## 入口文件 (Slash Entry Layer — 薄入口)
 
-该仓库包含了一套结构化的多阶段 AI 研发工作流文件：
+7 个入口文件按统一 7 步执行序列引导,硬门禁与禁止行为统一指向 `core/` 与 `stages/`,不再重抄。
 
-- 1-需求确认.md：定义项目需求确认的门禁条件和标准化流程。
-- 2-方案设计.md：详细设计、技术选型及架构方案的编写模板。
-- 3-任务拆分.md：将设计转化为原子级可执行任务的流程和原则。
-- 4-编码实现.md：编码阶段的标准、最佳实践与防御性编程规范。
-- 5-审查报告.md：代码审查、静态分析和缺陷拦截的流程与报告规范。
-- 6-复盘优化.md：项目交付后的复盘、性能优化与经验固化指南。
-- 7-技能巡检.md：智能体自身技能和工具调用的巡检规范。
-- OVERVIEW.md：工作流的整体全景图与流程指引。
-- REFACTOR-RECAP.md：重构和复盘的专项总结文件。
+- `1-需求确认.md`:进入 Requirement 阶段。
+- `2-方案设计.md`:进入 Design 阶段。
+- `3-任务拆分.md`:进入 Tasking 阶段。
+- `4-编码实现.md`:进入 Implementation 阶段。
+- `5-审查报告.md`:进入 Review 阶段。
+- `6-复盘优化.md`:进入 Retro 阶段。
+- `7-技能巡检.md`:进入 Skill Audit 阶段。
+- `OVERVIEW.md`:工作流的整体全景图与流程指引,新模型实例的首读文档。
 
-## 其它目录
-- core/：核心工作流引擎/逻辑定义。
-- references/：参考规范和参考资料。
-- stages/：各具体阶段的详细步骤描述。
-- templates/：各阶段输出物模板。
+## 目录说明
+
+- `core/`:跨阶段共享的执行内核,包括 workflow-engine、stage-gates、evidence-engine、anti-hallucination、codegraph-engine、memory-engine、challenge-engine、simplification-engine、visualization-engine。
+- `stages/`:每个阶段的协议(Allowed / Disallowed Actions、ID 约定、Required Output、Handoff Checks、Rollback Conditions)。
+- `templates/`:阶段产物模板与项目文档骨架模板(两类,见下)。
+- `references/`:稳定术语与规则参考(glossary、tool-compatibility、knowledge-quality-standards、frontend / backend / workflow-and-ops standards、各平台工具映射)。
+
+## 模板分类
+
+`templates/` 下混合了两类用途不同的模板,**字段检查范围不同**:
+
+### 阶段产物模板 (Stage Artifact Templates)
+
+写入 `.workflow/<artifact>.md`,作为阶段间标准交接物;**必须**含 `Mandatory Reads / Evidence Ledger / Logic Thinking Evidence / CodeGraph Evidence / Claim Evidence Map / Blockers / Rollback Advice / Completion Conditions` 等硬字段:
+
+- `requirement-contract.md`
+- `implementation-plan.md`
+- `task-list.md`
+- `review-report.md`
+- `retro-report.md`
+- `skill-audit-report.md`
+
+### 项目文档骨架模板 (Project Doc Scaffolding Templates)
+
+写入项目本地 `docs/architecture/` 或 `.workflow/prototypes/`,**不套用**阶段产物字段检查,字段检查脚本应将其排除:
+
+- `architecture-index.md`
+- `architecture-module.md`
+- `prototype-structure.md`
+
+## Test Plan 检查范围
+
+仓库自检脚本只对以下 13 份文件强制字段完备性:
+
+- 7 个 slash 入口文件(`?-*.md`)。
+- 6 份阶段产物模板(上节"阶段产物模板"列出的 6 份)。
+
+骨架模板与 `core/`、`stages/`、`references/` 等规则文件按各自语义检查,不套用阶段产物字段。
+
+## ID 约定
+
+- `AC-id`:Acceptance Criterion(Stage 1 创建)。
+- `A-id` / `M-id`:Architecture Decision / Module(Stage 2 创建)。
+- `T-id`:Task(Stage 3 创建)。
+- `F-id`:Finding(Stage 5 创建)。
+- `Change-id`:Workflow / Rule Change(Stage 6 创建)。
+- `Gap-id` / `Cand-id` / `Decision-id`:Gap / Candidate Skill / Decision(Stage 7 创建)。
+- `E-id`:Evidence Ledger 条目编号(每个阶段独立编号)。
+
+详见 `references/glossary.md` 的 `ID Conventions` 节。

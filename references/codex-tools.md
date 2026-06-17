@@ -12,6 +12,8 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Skill` tool (invoke a skill) | Skills load natively — just follow the instructions |
 | `Read`, `Write`, `Edit` (files) | Use your native file tools |
 | `Bash` (run commands) | Use your native shell tools |
+| `codegraph` 初始化 (`init` / `index`) | 通过 Codex 的 shell 工具执行 `npx @colbymchenry/codegraph init` 或对应 CLI |
+| `codegraph.find_callers` / `find_callees` / `find_definition` / `search_symbol` / `trace_flow` | Codex 的 MCP 工具桥接,前缀为 `mcp__codegraph__<name>` |
 
 ## Subagent dispatch requires multi-agent support
 
@@ -57,3 +59,12 @@ the user to use the App's native controls:
 
 The agent can still run tests, stage files, and output suggested branch
 names, commit messages, and PR descriptions for the user to copy.
+
+## CodeGraph Integration
+
+工作流的 `core/codegraph-engine.md` 把 codegraph 拆为 **Initialization Layer**(强制不豁免)与 **Query Layer**(查询时按阶段最少动作清单)。Codex 平台的对接如下:
+
+- **初始化**:用 Codex 的 shell 工具执行 `npx @colbymchenry/codegraph init`,完成后确认 `.codegraph/codegraph.db` 存在;失败必须按 `core/codegraph-engine.md` 的 Unavailable 路径登记。
+- **查询**:Codex 通过 MCP 桥接 codegraph 的查询能力,工具名一般形如 `mcp__codegraph__find_callers` / `find_callees` / `find_definition` / `search_symbol` / `trace_flow`。具体工具名以当前 Codex 会话注入的 MCP 工具列表为准。
+- **跳过证据**:本平台允许 Stage 6 / 7 跳过查询层,但必须按 `core/codegraph-engine.md` 写出 `Skipped Action / Skip Reason / Alternative Evidence E-ids`。
+- **能力等价回退**:codegraph 不可用时按 `references/tool-compatibility.md` 的 `Capability-to-Tool Mapping` 表回退到 `grep + view_file`,并把回退证据登记到 Evidence Ledger。
