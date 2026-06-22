@@ -16,3 +16,22 @@ Desktop.ini
 
 # Local history
 .history/
+.codegraph/.gitignore
+evals/evals.json
+review-workspace/iteration-1/review.html
+review-workspace/iteration-1/eval-0-requirement/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-0-requirement/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-1-design/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-1-design/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-2-tasking/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-2-tasking/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-3-implementation/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-3-implementation/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-4-review/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-4-review/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-5-retro/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-5-retro/with_skill/outputs/expected_output.md
+review-workspace/iteration-1/eval-6-skill-audit/with_skill/eval_metadata.json
+review-workspace/iteration-1/eval-6-skill-audit/with_skill/outputs/expected_output.md
+stress-eval/grading-rubric.md
+stress-eval/task.md
