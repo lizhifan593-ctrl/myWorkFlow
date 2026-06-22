@@ -48,6 +48,7 @@ Update `.workflow/task-list.md` and code files as needed:
 - Claim Evidence Map links completion/verification claims to high-confidence `E-id`s.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run real file existence checks for the current task's expected code/test outputs and `.workflow/task-list.md`; if any required file is missing, do not continue and record `Blocked`.
 - Code change fits the task, design, and requirement boundaries.
 - Relevant build/test/run command was executed, or failure is recorded as Blocked / Not verified / Pending.
 - Task List is not stale relative to actual implementation.

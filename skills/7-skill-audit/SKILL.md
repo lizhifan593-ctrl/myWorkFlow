@@ -51,6 +51,7 @@ Write `.workflow/skill-audit-report.md` following `templates/skill-audit-report.
 - Workflow Impact, Knowledge Update Evidence, Blockers, Rollback Advice, Completion Conditions.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/skill-audit-report.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
 - Skill gaps are clearly separated from process gaps and knowledge gaps.
 - Every candidate has a four-dimensional evaluation.
 - Every decision has evidence and a clear action: `Install / Replace / Update / Skip / Defer`.

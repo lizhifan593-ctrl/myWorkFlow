@@ -49,6 +49,8 @@ Write `.workflow/requirement-contract.md` following `templates/requirement-contr
 - Open Issues, Blockers, Rollback Advice, Completion Conditions, Next Step.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/requirement-contract.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
+
 - Every completion claim maps to real `E-id` evidence.
 - Requirement Contract contains verifiable ACs and enough scope/constraint detail.
 - Local architecture entry was checked when existing project flow is involved.

@@ -47,6 +47,7 @@ Write `.workflow/retro-report.md` following `templates/retro-report.md` and incl
 - Prevention Strategy, Follow-up Suggestions, Blockers, Rollback Advice, Completion Conditions.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/retro-report.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
 - Root cause is specific and distinguishes single failure vs system issue.
 - At least one Workflow / Rule Change or Knowledge Update is actually written and evidenced, or Blockers explain why not.
 - Project architecture knowledge goes to project docs; cross-project process knowledge goes to `C:\knowledge`.

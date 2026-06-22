@@ -55,6 +55,7 @@ Write `.workflow/review-report.md` following `templates/review-report.md` and in
 - Blockers, Rollback Advice, Completion Conditions, Knowledge Update Evidence.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/review-report.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
 - Alignment tables cover all relevant `AC-id`, `M-id`, and `T-id` with clear status.
 - Findings `None` is backed by real evidence.
 - `Pass` only appears when Claim Evidence Map supports all completion claims with high-confidence `E-id`s.

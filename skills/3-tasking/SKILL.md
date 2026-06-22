@@ -50,6 +50,7 @@ Write `.workflow/task-list.md` following `templates/task-list.md` and include:
 - Open Issues, Blockers, Rollback Advice, Completion Conditions, Knowledge Update Evidence.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/task-list.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
 - Every task is independently executable and verifiable.
 - Task order reflects dependencies and avoids preventable conflicts.
 - Every `T-id` has CodeGraph evidence or compliant skip evidence.

@@ -54,6 +54,7 @@ Write `.workflow/implementation-plan.md` following `templates/implementation-pla
 - Evidence Ledger, Logic Thinking Evidence, CodeGraph Evidence, Claim Evidence Map, Knowledge Update Evidence.
 
 ## Handoff Checks
+- **Filesystem Exit Gate**: before leaving this stage, run a real file existence check for `.workflow/implementation-plan.md` in the active work directory; if the file is missing, do not continue and record `Blocked`.
 - Plan can guide atomic task splitting.
 - Every `AC-id` has a validation route.
 - Every `M-id` has CodeGraph evidence or compliant skip evidence.
