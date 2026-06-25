@@ -1,159 +1,83 @@
-# Global Workflows Overview
+# Global Workflows Overview (工作流全局全景图)
 
-## 1. Purpose
-这份文档用于帮助新的模型实例或维护者快速理解当前工作流系统的结构、入口、流转方式和迁移背景。
+## 1. Purpose (目的)
+本档用于帮助新模型实例或维护者快速理解基于 **Nous Research Hermes Agent** 概念（5-5 架构、认知自进化与脱水证据审计）重构后的工作流系统的结构、入口、流转与进化机制。
 
-目标不是重复所有规则正文，而是回答四个问题：
-- 从哪里进入？
-- 每一层目录负责什么？
-- 阶段之间如何流转和回退？
-- 这套新结构与旧版七步长流程是什么关系？
+---
 
-## 2. Entry Points
-外部入口仍然保持原有 7 个 slash 工作流文件：
-- `1-需求确认.md`
-- `2-方案设计.md`
-- `3-任务拆分.md`
-- `4-编码实现.md`
-- `5-审查报告.md`
-- `6-复盘优化.md`
-- `7-技能巡检.md`
+## 2. Entry Points (外部入口)
+外部入口目前由 5 个 slash 快捷引导文件组成，它们是极薄的入口层，用于声明当前阶段、检查准入条件、加载对应规则和指导唯一下一步：
 
-这些文件现在是**薄入口层**，负责：
-- 声明当前阶段
-- 指出必须加载的核心规则与阶段协议
-- 执行准入检查
-- 给出退出与下一步建议
+- `1-需求与设计.md`
+- `2-任务拆分.md`
+- `3-编码实现.md`
+- `4-审查与验证.md`
+- `5-复盘与自进化.md`
 
-它们不再承担全部细节规则。
+入口文件仅保留基础元数据（约 15 行），不再冗余编写全局规则。
 
-## 3. Directory Map
+---
 
-### `core/`
-存放所有阶段共享的执行内核：
-- `workflow-engine.md`：全局执行顺序
-- `stage-gates.md`：输入门、范围门、证据门、出口门、回退门
-- `evidence-engine.md`：证据来源与证据格式
-- `challenge-engine.md`：后续阶段对前序产物的质疑机制
-- `memory-engine.md`：知识读取、使用、更新、维护规则
-- `visualization-engine.md`：前端结构原型规则
-- `simplification-engine.md`：避免过度设计与复杂度膨胀
+## 3. Directory Map (目录结构图)
 
-### `stages/`
-存放每个阶段自己的协议：
-- 当前阶段目标
-- 必需输入
-- 允许动作
-- 禁止动作
-- 必需产物
-- 结果检查
-- 回退条件
+### `core/` (共享内核)
+存放全局通用的执行引擎，目前高度精简为 2 个高内聚的超级引擎文件：
+- `hermes-harness.md`：**驾驭与审计系统**。定义了各阶段内的 **Hermes 5 步循环** 内部规程、安全硬门禁、反幻觉与硬证据对账及终端测试执行 Trace 日志对账。
+- `hermes-cognition.md`：**认知与自进化系统**。定义了代码图谱（CodeGraph）探勘门禁、双层隔离知识库读取（索引优先原则）、极简设计防过度开发规范及 **SKILL.md 实体技能自编译规程**。
 
-### `templates/`
-存放标准产物模板，用于阶段之间稳定交接：
-- `requirement-contract.md`
-- `implementation-plan.md`
+### `stages/` (阶段协议)
+存放 5 个大阶段的业务协议（ Allowed / Disallowed Actions, Handoff Checks, ID Conventions 等）：
+- `1-requirement-design.md`
+- `2-tasking.md`
+- `3-implementation.md`
+- `4-review.md`
+- `5-retro-evolution.md`
+
+### `templates/` (阶段交付产物模板)
+存放 5 个标准的 Markdown 交付模板。模型必须 100% 完整渲染模板中规定的二级标题：
+- `design-contract.md`
 - `task-list.md`
-- `prototype-structure.md`
+- `walkthrough.md`
 - `review-report.md`
-- `retro-report.md`
-- `skill-audit-report.md`
+- `retro-evolution-report.md`
 
-### `knowledge/`
-存放双层知识库：
-- `global/`：跨项目稳定成立的用户偏好、协作规则、长期经验
-- `project/`：只对当前项目成立、在开发中逐步沉淀的架构、模块、接口、业务与技术决策认知
+---
 
-知识读取遵循：
-- 先读 `INDEX.md`
-- 再按相关性读摘要
-- 需要时再读正文片段
+## 4. Stage Flow & Rollback (阶段流转与回退)
 
-### `references/`
-存放稳定的规则、标准与术语：
-- `glossary.md`
-- `frontend-standards.md`
-- `backend-standards.md`
-- `workflow-and-ops-standards.md`
-- `tool-compatibility.md`
-- `knowledge-quality-standards.md`
-- 以及工具映射参考文件
+标准流转顺序为：
+```mermaid
+graph LR
+    Stage1["1. 需求与设计"] --> Stage2["2. 任务拆分"]
+    Stage2 --> Stage3["3. 编码实现"]
+    Stage3 --> Stage4["4. 审查与验证"]
+    Stage4 --> Stage5["5. 复盘与自进化"]
+```
 
-## 4. Stage Flow
-标准主流程为：
-1. Requirement
-2. Design
-3. Tasking
-4. Implementation
-5. Review
-6. Retro
-7. Skill Audit
+### Handoff Rule (流转规则)
+必须在物理上成功落盘对应的交付产物，才允许推荐下一步。
 
-### Main Rule
-阶段流转以**标准产物 + 证据 + 出口条件**为基础，而不是靠对话记忆默认继续。
+### Rollback Rule (质疑与回退规则)
+后续阶段有权在开始前对前序产物的完整性、一致性、可执行性发起质疑。质疑失败触发严格回退：
+- Stage 2 (任务拆分) $\to$ Stage 1 (需求与设计)
+- Stage 3 (编码实现) $\to$ Stage 2 或 Stage 1
+- Stage 4 (审查与验证) $\to$ Stage 3、Stage 2 或 Stage 1
+- Stage 5 (复盘与自进化) $\to$ Stage 4 (当问题本质是代码缺陷未解决)
 
-### Rollback Rule
-后续阶段有权对前序产物发起质疑，并在必要时回退：
-- Design → Requirement
-- Tasking → Design
-- Implementation → Tasking / Design
-- Review → Implementation / Tasking / Design / Requirement
-- Skill Audit → Retro（当问题本质是流程缺陷时）
+---
 
-## 5. Knowledge Maintenance Rule
-知识库维护不再主要依赖长对话上下文，而是优先基于：
-- 阶段产物
-- 最终结果
-- 用户最终确认
+## 5. Hermes 自进化机制 (Self-Evolution & Procedural Memory)
 
-若上下文过长或被压缩，应：
-1. 先回读相关阶段产物
-2. 再回读最终结果
-3. 若产物落后于真实结论，先补产物，再更新知识库
+本系统的核心变革是实现了真正的“实体自进化”：
+- **声明式记忆更新 (Memory Update)**：本次任务带来的项目具体业务架构和核心接口变动，必须物理写入本地 `docs/architecture/INDEX.md` 和相应子文件，严禁污染全局知识库。
+- **程序化技能编译 (Skill Compiler)**：若本次任务在开发、配置、调试过程中总结出了一套可复用的命令组合或代码生成流程，模型必须按 `agentskills.io` 标准，在 `skills/<skill_name>/SKILL.md` 中物理写入技能描述（含 YAML Header）。在下一次对话开启时，IDE 会根据哥哥描述的新需求**自动语义匹配并加载该技能**，实现实体能力进化。
 
-这条原则已经落地在：
-- `core/memory-engine.md`
-- `references/knowledge-quality-standards.md`
-- `stages/4-implementation.md` ~ `stages/7-skill-audit.md`
-- 若干模板中的 `Knowledge Update Evidence`
+---
 
-## 6. Migration Notes
-旧版工作流的特点是：
-- 七个阶段都写在各自的长文档里
-- 大量重复规则散落在多个文件中
-- 对模型过程限制较强
-- 知识沉淀机制较弱，且更依赖对话上下文
-
-新版工作流的变化是：
-- **保留原有 7 个外部入口**，不破坏使用习惯
-- **把通用纪律抽到 `core/`**，减少重复
-- **把阶段职责抽到 `stages/`**，让每阶段边界更清晰
-- **把交接产物抽到 `templates/`**，让流转依赖标准产物而不是口头状态
-- **把长期记忆抽到 `knowledge/`**，并引入索引优先读取机制
-- **把标准与术语抽到 `references/`**，减少模型理解歧义
-
-### Mapping: Old → New
-- 旧版“每个 slash 文件里既有阶段目标又有通用纪律”
-  → 新版拆成“入口层 + core + stage 协议”
-- 旧版“知识更多依赖对话总结”
-  → 新版改成“基于阶段产物与最终结果更新知识”
-- 旧版“同类规则重复出现在多个阶段”
-  → 新版由 `core/` 统一承载
-
-## 7. Recommended Reading Order for New Models
-若模型第一次进入本系统，建议读取顺序：
+## 6. Recommended Reading Order (推荐阅读顺序)
+新模型实例在进入本项目时，推荐阅读顺序如下：
 1. 本文档 `OVERVIEW.md`
-2. `references/glossary.md`
-3. 对应 slash 入口文件
-4. `core/workflow-engine.md`
-5. `core/stage-gates.md`
-6. 当前阶段对应的 `stages/*.md`
-7. 当前需要的模板与知识索引
-
-## 8. Operating Principle Summary
-这套系统的核心原则是：
-- 结果优先，而不是把模型过程写死
-- 证据先于完成声明
-- 阶段产物先于知识维护
-- 后续阶段可以质疑前序阶段
-- 高能力模型保留发挥空间，低能力模型依靠结构化协议维持下限
+2. `references/glossary.md` (术语与 ID 规范)
+3. 对应阶段入口快捷文件 (如 `1-需求与设计.md`)
+4. `core/hermes-harness.md` 与 `core/hermes-cognition.md`
+5. 当前阶段协议与对应模板

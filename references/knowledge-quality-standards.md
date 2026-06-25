@@ -33,12 +33,11 @@
 - 知识维护优先基于可回读的阶段产物与最终结果,而不是依赖长对话上下文。
 - 若对话上下文已被压缩,知识总结应优先回读相关阶段产物,再回读最终结果。
 - 若阶段产物与实际结论不一致,应先修正阶段产物,再写知识库。
-- 知识条目如来源于阶段产物,**必须**在 Knowledge Update Evidence 中按 ID 引用:
-  - 来自 Requirement Contract 的偏好或约束 → 引用 `AC-id`。
-  - 来自 Implementation Plan 的架构经验 → 引用 `M-id` / `A-id`。
-  - 来自 Task List 的实施踩坑 → 引用 `T-id`。
-  - 来自 Review Report 的缺陷模式 → 引用 `F-id`。
-  - 来自 Retro Report 的规则修改 → 引用 `Change-id`。
+- 知识与技能条目如来源于阶段产物,**必须**在 Knowledge Update Evidence 中按 ID 或路径引用:
+  - 来自 Design Contract 的需求、设计偏好或约束 → 引用 `AC-id` / `M-id` / `A-id`。
+  - 来自 Task List 的实施拓扑与踩坑 → 引用 `T-id`。
+  - 来自 Review Report 的缺陷模式与验证 Trace → 引用 `F-id`。
+  - 来自 Retro & Evolution Report 的规则修改或自编译技能 → 引用 `Change-id` 或 `SKILL.md` 物理路径。
 - 知识条目可以同时挂多个 ID;但每条至少要挂 1 个 `E-id`(来自对应阶段的 Evidence Ledger),否则视为伪证据。
 
 ## Reading Standards
